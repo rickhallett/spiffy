@@ -1,4 +1,6 @@
 import fastify from "fastify";
+import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import { UserType, User } from "./typebox/User";
 
 interface IQuerystring {
   username: string;
@@ -15,16 +17,23 @@ interface IReply {
   "4xx": { error: string };
 }
 
-const server = fastify();
+// import json schemas as normal
+import QuerystringSchema from './schemas/querystring.json'
+import HeadersSchema from './schemas/headers.json'
+
+// import the generated interfaces
+import { QuerystringSchema as QuerystringSchemaInterface } from './types/querystring'
+import { HeadersSchema as HeadersSchemaInterface } from './types/headers'
+
+const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
 
 server.get("/ping", async (request, reply) => {
   return reply.send({ ping: "server running!" });
 });
 
 server.get<{
-  path: string;
-  Querystring: IQuerystring;
-  Headers: IHeaders;
+  Querystring: QuerystringSchemaInterface;
+  Headers: HeadersSchemaInterface;
   Reply: IReply;
 }>(
   "/auth",
@@ -45,6 +54,46 @@ server.get<{
     reply.code(404).send({ error: "Not found" });
   }
 );
+
+server.post<{ Body: UserType; Reply: UserType }>(
+  "/",
+  {
+    schema: {
+      body: User,
+      response: {
+        200: User,
+      },
+    },
+  },
+  (request, reply) => {
+    // The `name` and `mail` types are automatically inferred
+    const { name, mail }: { name: string; mail?: string | undefined } =
+      request.body;
+    reply.status(200).send({ name, mail: mail ?? "no mail" });
+  }
+);
+
+server.route<{
+  Querystring: QuerystringSchemaInterface,
+  Headers: HeadersSchemaInterface
+}>({
+  method: 'GET',
+  url: '/auth2',
+  schema: {
+    querystring: QuerystringSchema,
+    headers: HeadersSchema
+  },
+  preHandler: (request, reply, done) => {
+    const { username, password } = request.query
+    const customerHeader = request.headers['h-Custom']
+    done()
+  },
+  handler: (request, reply) => {
+    const { username, password } = request.query
+    const customerHeader = request.headers['h-Custom']
+    reply.status(200).send({username});
+  }
+})
 
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {
