@@ -6,29 +6,29 @@ import { createTodo } from "./routes/todo/createTodo";
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import autoLoad from "@fastify/autoload";
 import { join } from "path";
-import fastify from "fastify";
 
-const app = fastify();
-
-const server: FastifyInstance = Fastify(
+const fastify: FastifyInstance = Fastify(
   {}
 ).withTypeProvider<TypeBoxTypeProvider>();
 
-server.register(autoLoad, {
+fastify.register(autoLoad, {
   dir: join(__dirname, "plugins"),
 });
 
-server.register(getPing);
-server.register(createUser);
-server.register(queryParamLogin);
-server.register(createTodo);
+fastify.register(import("@fastify/routes"));
 
-server.listen({ port: 8080 }, (err, address) => {
+fastify.register(getPing);
+fastify.register(createUser);
+fastify.register(queryParamLogin);
+fastify.register(createTodo);
+
+fastify.listen({ port: 8080 }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
   }
   console.log(`Server listening at ${address}`);
-  console.log(server.printRoutes({ includeHooks: true }));
-  console.log(server.printPlugins());
+  console.log(fastify.printRoutes({ includeHooks: true }));
+  console.log(fastify.printPlugins());
+  // console.log(fastify.routes);
 });

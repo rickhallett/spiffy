@@ -16,6 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/autoload": "^5.7.1",
+    "@fastify/basic-auth": "^5.0.0",
+    "@fastify/routes": "^5.1.0",
     "@fastify/type-provider-typebox": "^3.5.0",
     "@prisma/client": "^5.2.0",
     "@sinclair/typebox": "^0.31.14",
