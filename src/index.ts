@@ -1,14 +1,53 @@
-import fastify from "fastify";
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import { FromSchema } from "json-schema-to-ts";
+import fastify, { FastifyPluginCallback, FastifyPluginAsync } from "fastify";
 import { UserType, User } from "./typebox/User";
 import { todo } from "./schemas/todo";
+import fp from "fastify-plugin";
 
-interface IQuerystring {
+// using declaration merging, add your plugin props to the appropriate fastify interfaces
+// if prop type is defined here, the value will be typechecked when you call decorate{,Request,Reply}
+
+declare module "fastify" {
+  interface FastifyRequest {
+    myPluginProp: string;
+  }
+  interface FastifyReply {
+    myPluginProp: number;
+  }
+}
+
+// define options
+export interface MyPluginOptions {
+  myPluginOption: string;
+}
+
+// define plugin using callbacks
+const myPluginCallback: FastifyPluginCallback<MyPluginOptions> = (
+  fastify,
+  options,
+  done
+) => {
+  fastify.decorateRequest("myPluginProp", "super_secret_value");
+  fastify.decorateReply("myPluginProp", options.myPluginOption as any);
+
+  done();
+};
+
+// define plugin using promises
+const myPluginAsync: FastifyPluginAsync<MyPluginOptions> = async (
+  fastify,
+  options
+) => {
+  fastify.decorateRequest("myPluginProp", "super_secret_value");
+  fastify.decorateReply("myPluginProp", options.myPluginOption as any);
+};
+
+interface IAuthQuerystring {
   username: string;
   password: string;
 }
 
-interface IHeaders {
+interface ICustomHeaders {
   "h-Custom": string;
 }
 
@@ -18,23 +57,15 @@ interface IReply {
   "4xx": { error: string };
 }
 
-// import json schemas as normal
-import QuerystringSchema from './schemas/querystring.json'
-import HeadersSchema from './schemas/headers.json'
-
-// import the generated interfaces
-import { QuerystringSchema as QuerystringSchemaInterface } from './types/querystring'
-import { HeadersSchema as HeadersSchemaInterface } from './types/headers'
-
-const server = fastify().withTypeProvider<TypeBoxTypeProvider>();
+const server = fastify();
 
 server.get("/ping", async (request, reply) => {
   return reply.send({ ping: "server running!" });
 });
 
 server.get<{
-  Querystring: QuerystringSchemaInterface;
-  Headers: HeadersSchemaInterface;
+  Querystring: IAuthQuerystring;
+  Headers: ICustomHeaders;
   Reply: IReply;
 }>(
   "/auth",
@@ -74,59 +105,26 @@ server.post<{ Body: UserType; Reply: UserType }>(
   }
 );
 
-server.route<{
-  Querystring: QuerystringSchemaInterface,
-  Headers: HeadersSchemaInterface
-}>({
-  method: 'GET',
-  url: '/auth2',
-  schema: {
-    querystring: QuerystringSchema,
-    headers: HeadersSchema
-  },
-  preHandler: (request, reply, done) => {
-    const { username, password } = request.query
-    const customerHeader = request.headers['h-Custom']
-    done()
-  },
-  handler: (request, reply) => {
-    const { username, password } = request.query
-    const customerHeader = request.headers['h-Custom']
-    reply.status(200).send({username});
-  }
-});
-
-import { FromSchema } from "json-schema-to-ts";
-
 server.post<{ Body: FromSchema<typeof todo> }>(
-  '/todo',
+  "/todo",
   {
     schema: {
       body: todo,
       response: {
         201: {
-          type: 'string',
+          type: "string",
         },
       },
-    }
+    },
   },
   async (request, reply): Promise<void> => {
-
-    /*
-    request.body has type
-    {
-      [x: string]: unknown;
-      description?: string;
-      done?: boolean;
-      name: string;
-    }
-    */
-
-    request.body.name // will not throw type error
-    request.body.notthere // will throw type error
-
-    reply.status(201).send(JSON.stringify({requestBody: request.body}));
-  },
+    reply.status(201).send(
+      JSON.stringify({
+        requestBody: request.body,
+        replyBody: request.body,
+      })
+    );
+  }
 );
 
 server.listen({ port: 8080 }, (err, address) => {
@@ -136,3 +134,6 @@ server.listen({ port: 8080 }, (err, address) => {
   }
   console.log(`Server listening at ${address}`);
 });
+
+// export plugin using fastify-plugin
+export default fp(myPluginAsync, "3.x");

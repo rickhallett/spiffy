@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "nodemon ./dist/index.js",
-    "compile-schemas": "json2ts -i ./src/schemas -o ./src/types"
+    "compile-schemas": "json2ts -i ./src/schemas -o ./src/types",
+    "watch:tsc": "tsc -p tsconfig.json --watch"
   },
   "keywords": [],
   "author": "",
@@ -14,11 +15,13 @@
   "dependencies": {
     "@fastify/type-provider-typebox": "^3.5.0",
     "@sinclair/typebox": "^0.31.14",
-    "fastify": "^4.23.0"
+    "fastify": "^4.23.0",
+    "fastify-plugin": "^4.5.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.1",
     "@types/node": "^20.6.0",
+    "json-schema-to-ts": "^2.9.2",
     "json-schema-to-typescript": "^13.1.1",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
