@@ -1,7 +1,7 @@
 import { FastifyPluginCallback } from "fastify";
 import fp from "fastify-plugin";
 
-export const pingRoute: FastifyPluginCallback = fp((fastify, options, done) => {
+export const getPing: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.route({
     method: "GET",
     url: "/ping",
