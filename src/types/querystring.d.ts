@@ -6,6 +6,6 @@
  */
 
 export interface QuerystringSchema {
-  username: string;
-  password: string;
+    username: string;
+    password: string;
 }
