@@ -1,18 +1,21 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
-    "username" TEXT NOT NULL
+    "username" TEXT NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Todo" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "done" BOOLEAN NOT NULL DEFAULT false,
     "userId" INTEGER NOT NULL,
-    CONSTRAINT "Todo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+
+    CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -23,3 +26,6 @@ CREATE INDEX "username" ON "User"("username");
 
 -- CreateIndex
 CREATE INDEX "userId" ON "Todo"("userId");
+
+-- AddForeignKey
+ALTER TABLE "Todo" ADD CONSTRAINT "Todo_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
