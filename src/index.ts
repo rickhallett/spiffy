@@ -11,7 +11,6 @@ import 'dotenv/config';
 import { register } from './routes/auth/register';
 import { getUsers } from './routes/user/getUsers';
 import { home } from './routes/home/home';
-// import { signOut } from "./routes/auth/signout";
 import { login } from './routes/auth/login';
 import { root } from './routes/root';
 import { me } from './routes/user/me';
@@ -37,12 +36,12 @@ fastify.register(queryParamLogin);
 fastify.register(createTodo);
 fastify.register(register);
 fastify.register(login);
-// fastify.register(signOut);
 fastify.register(home);
 fastify.register(root);
 
 // Init Fastify server
-fastify.listen({ port: 8080 }, (err, address) => {
+const PORT = parseInt(process.env.PORT) || 8080;
+fastify.listen({ port: PORT }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
@@ -53,7 +52,6 @@ fastify.listen({ port: 8080 }, (err, address) => {
 
   console.log(fastify.printRoutes());
   // console.log(fastify.printPlugins());
-  // console.log(fastify.routes);
 });
 
 async function startSwagger() {
