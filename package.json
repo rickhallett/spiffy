@@ -6,7 +6,7 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "nodemon ./dist/index.js",
+    "start": "npm run build && nodemon ./dist/index.js",
     "compile-schemas": "json2ts -i ./src/schemas -o ./src/types",
     "watch:tsc": "tsc -p tsconfig.json --watch",
     "format": "prettier -w ."
