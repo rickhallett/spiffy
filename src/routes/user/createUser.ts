@@ -5,9 +5,7 @@ import { getAuth, clerkClient } from '@clerk/fastify';
 
 export const createUser: FastifyPluginCallback = fp(
   (fastify, options, done) => {
-    fastify.setErrorHandler((error, request, reply) => {});
-
-    fastify.post<{ Body: UserType; Reply: UserType | unknown }>(
+    fastify.post(
       '/user/create',
       {
         onError: (error, request, reply) => {
@@ -16,7 +14,27 @@ export const createUser: FastifyPluginCallback = fp(
         preHandler: async (request, reply, done) => {},
         preValidation: async (request, reply, done) => {},
       },
-      async (request, reply) => {}
+      async (request, reply) => {
+        const user = await fastify.prisma.user.create({
+          data: {
+            name: 'Rich',
+            email: 'hello@prisma.com',
+            posts: {
+              create: {
+                title: 'My first post',
+                body: 'Lots of really interesting stuff',
+                slug: 'my-first-post',
+              },
+            },
+          },
+        });
+
+        if (!user) {
+          reply.status(404).send({ error: 'User not created' });
+        }
+
+        reply.status(200).send({ user });
+      }
     );
 
     done();
