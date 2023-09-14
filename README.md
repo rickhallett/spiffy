@@ -46,4 +46,6 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
 3. add Strange Beings phrase to English conversion
 4. Full crud on User, Todo, StrangeBeings, Auth
 5. Use fastify route print out to automatically update README declaration of routes
-6. Use plugin docs to add swagger to autoload correctly with TS 
+6. Use plugin docs to add swagger to autoload correctly with TS
+7. Find out which parts of Swagger files I do not need for dynamic generation of routes
+8. Improve logger at init and runtime 
