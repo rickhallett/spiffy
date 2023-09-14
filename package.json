@@ -7,10 +7,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "nodemon ./dist/index.js",
+    "start:heroku": "node ./dist/index.js",
     "compile-schemas": "json2ts -i ./src/schemas -o ./src/types",
     "watch:tsc": "tsc -p tsconfig.json --watch",
     "format": "prettier -w .",
-    "deploy": "npx prisma migrate deploy && npm run build && npm run start"
+    "deploy": "npx prisma migrate deploy && npm run build && npm run start:heroku"
   },
   "keywords": [],
   "author": "rickhallett",
