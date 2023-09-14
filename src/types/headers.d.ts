@@ -6,5 +6,5 @@
  */
 
 export interface HeadersSchema {
-    'h-Custom': string;
+  'h-Custom': string;
 }

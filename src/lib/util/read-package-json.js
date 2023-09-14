@@ -1,16 +1,18 @@
-'use strict'
+'use strict';
 
-const fs = require('node:fs')
-const path = require('node:path')
+const fs = require('node:fs');
+const path = require('node:path');
 
-function readPackageJson () {
+function readPackageJson() {
   try {
-    return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json')))
+    return JSON.parse(
+      fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'))
+    );
   } catch (err) {
-    return {}
+    return {};
   }
 }
 
 module.exports = {
-  readPackageJson
-}
+  readPackageJson,
+};

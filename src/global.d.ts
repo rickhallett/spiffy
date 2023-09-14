@@ -4,27 +4,27 @@ import {
   RouteOptions,
   onRequestHookHandler,
   preHandlerHookHandler,
-} from "fastify";
-import { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from "openapi-types";
+} from 'fastify';
+import { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
 /**
  * Swagger-UI Vendor Extensions
  * @see https://support.smartbear.com/swaggerhub/docs/apis/vendor-extensions.html#api-docs-x-tokenname
  */
-declare module "openapi-types" {
+declare module 'openapi-types' {
   namespace OpenAPIV3 {
     interface OAuth2SecurityScheme {
-      "x-tokenName"?: string;
+      'x-tokenName'?: string;
     }
   }
   namespace OpenAPIV2 {
     interface SecuritySchemeOauth2Base {
-      "x-tokenName"?: string;
+      'x-tokenName'?: string;
     }
   }
 }
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyInstance {
     swagger: ((opts?: { yaml?: false }) => OpenAPI.Document) &
       ((opts: { yaml: true }) => string) &
@@ -56,7 +56,7 @@ declare module "fastify" {
 
   interface RouteShorthandOptions {
     links?: {
-      [statusCode: string]: OpenAPIV3.ResponseObject["links"];
+      [statusCode: string]: OpenAPIV3.ResponseObject['links'];
     };
   }
 
@@ -86,7 +86,7 @@ declare namespace fastifySwagger {
     | FastifyStaticSwaggerOptions
     | FastifyDynamicSwaggerOptions;
   export interface FastifySwaggerOptions {
-    mode?: "static" | "dynamic";
+    mode?: 'static' | 'dynamic';
   }
 
   export type FastifySwaggerUiConfigOptions = Partial<{
@@ -112,7 +112,7 @@ declare namespace fastifySwagger {
     tryItOutEnabled: boolean;
     validatorUrl: string | null;
     supportedSubmitMethods: Array<
-      "get" | "post" | "put" | "delete" | "patch" | "options"
+      'get' | 'post' | 'put' | 'delete' | 'patch' | 'options'
     >;
     persistAuthorization: boolean;
   }>;
@@ -142,7 +142,7 @@ declare namespace fastifySwagger {
   }
 
   export interface FastifyDynamicSwaggerOptions extends FastifySwaggerOptions {
-    mode?: "dynamic";
+    mode?: 'dynamic';
     swagger?: Partial<OpenAPIV2.Document>;
     openapi?: Partial<OpenAPIV3.Document | OpenAPIV3_1.Document>;
     hiddenTag?: string;
@@ -207,7 +207,7 @@ declare namespace fastifySwagger {
   }
 
   export interface FastifyStaticSwaggerOptions extends FastifySwaggerOptions {
-    mode: "static";
+    mode: 'static';
     specification: StaticPathSpec | StaticDocumentSpec;
   }
 

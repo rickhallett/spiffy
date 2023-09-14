@@ -1,5 +1,5 @@
-import { FastifyPluginCallback } from "fastify";
-import fp from "fastify-plugin";
+import { FastifyPluginCallback } from 'fastify';
+import fp from 'fastify-plugin';
 
 interface IAuthQuerystring {
   username: string;
@@ -7,13 +7,13 @@ interface IAuthQuerystring {
 }
 
 interface ICustomHeaders {
-  "h-Custom": string;
+  'h-Custom': string;
 }
 
 interface IReply {
   200: { success: boolean };
   302: { url: string };
-  "4xx": { error: string };
+  '4xx': { error: string };
 }
 
 export const queryParamLogin: FastifyPluginCallback = fp(
@@ -23,22 +23,22 @@ export const queryParamLogin: FastifyPluginCallback = fp(
       Headers: ICustomHeaders;
       Reply: IReply;
     }>(
-      "/auth",
+      '/auth',
       {
         preValidation: (request, reply, done) => {
           const { username, password } = request.query;
-          done(username !== "admin" ? new Error("Must be admin") : undefined);
+          done(username !== 'admin' ? new Error('Must be admin') : undefined);
         },
       },
       async (request, reply) => {
-        const customerHeader = request.headers["h-Custom"];
+        const customerHeader = request.headers['h-Custom'];
         // do something with request data
 
         // chaining .statusCode/.code calls with .send allows type narrowing. For example:
         // this works
         reply.code(200).send({ success: true });
         // it even works for wildcards
-        reply.code(404).send({ error: "Not found" });
+        reply.code(404).send({ error: 'Not found' });
       }
     );
 

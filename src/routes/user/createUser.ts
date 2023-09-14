@@ -1,14 +1,14 @@
-import { FastifyPluginCallback } from "fastify";
-import fp from "fastify-plugin";
-import { UserType, User } from "../../typebox/User";
-import { getAuth, clerkClient } from "@clerk/fastify";
+import { FastifyPluginCallback } from 'fastify';
+import fp from 'fastify-plugin';
+import { UserType, User } from '../../typebox/User';
+import { getAuth, clerkClient } from '@clerk/fastify';
 
 export const createUser: FastifyPluginCallback = fp(
   (fastify, options, done) => {
     fastify.setErrorHandler((error, request, reply) => {});
 
     fastify.post<{ Body: UserType; Reply: UserType | unknown }>(
-      "/user/create",
+      '/user/create',
       {
         onError: (error, request, reply) => {
           fastify.log.error(error);

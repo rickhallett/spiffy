@@ -1,12 +1,12 @@
-import fp from "fastify-plugin";
+import fp from 'fastify-plugin';
 import {
   FastifyInstance,
   FastifyPluginCallback,
   FastifyPluginOptions,
   FastifyError,
-} from "fastify";
-import { FromSchema } from "json-schema-to-ts";
-import { todo } from "../../schemas/todo";
+} from 'fastify';
+import { FromSchema } from 'json-schema-to-ts';
+import { todo } from '../../schemas/todo';
 
 export const createTodo: FastifyPluginCallback = fp(
   (
@@ -15,13 +15,13 @@ export const createTodo: FastifyPluginCallback = fp(
     done: (error?: FastifyError) => void
   ) => {
     fastify.post<{ Body: FromSchema<typeof todo> }>(
-      "/todo",
+      '/todo',
       {
         schema: {
           body: todo,
           response: {
             201: {
-              type: "string",
+              type: 'string',
             },
           },
         },

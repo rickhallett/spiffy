@@ -1,6 +1,7 @@
 # Spiffy. Just practicing
 
 ## Table of Contents
+
 - [Spiffy. Just practicing](#spiffy-just-practicing)
   - [Table of Contents](#table-of-contents)
   - [About](#about)
@@ -38,7 +39,6 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
     └── todo (POST)
 ```
 
-
 ## TODO
 
 1. index.html providing links to common routes, especially swagger ui
@@ -48,4 +48,5 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
 5. Use fastify route print out to automatically update README declaration of routes
 6. Use plugin docs to add swagger to autoload correctly with TS
 7. Find out which parts of Swagger files I do not need for dynamic generation of routes
-8. Improve logger at init and runtime 
+8. Improve logger at init and runtime
+9. Configure separate formatter for markdown

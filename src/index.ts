@@ -1,20 +1,20 @@
-import Fastify, { FastifyInstance } from "fastify";
-import { getPing } from "./routes/utils/getPing";
-import { createUser } from "./routes/user/createUser";
-import { queryParamLogin } from "./routes/auth/queryParamLogin";
-import { createTodo } from "./routes/todo/createTodo";
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
-import autoLoad from "@fastify/autoload";
-import { join } from "path";
-import { fastifySwaggerUIPlugin } from "./lib/spec/swagger/html";
-import "dotenv/config";
-import { register } from "./routes/auth/register";
-import { getUsers } from "./routes/user/getUsers";
-import { home } from "./routes/home/home";
+import Fastify, { FastifyInstance } from 'fastify';
+import { getPing } from './routes/utils/getPing';
+import { createUser } from './routes/user/createUser';
+import { queryParamLogin } from './routes/auth/queryParamLogin';
+import { createTodo } from './routes/todo/createTodo';
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import autoLoad from '@fastify/autoload';
+import { join } from 'path';
+import { fastifySwaggerUIPlugin } from './lib/spec/swagger/html';
+import 'dotenv/config';
+import { register } from './routes/auth/register';
+import { getUsers } from './routes/user/getUsers';
+import { home } from './routes/home/home';
 // import { signOut } from "./routes/auth/signout";
-import { login } from "./routes/auth/login";
-import { root } from "./routes/root";
-import { me } from "./routes/user/me";
+import { login } from './routes/auth/login';
+import { root } from './routes/root';
+import { me } from './routes/user/me';
 
 const fastify: FastifyInstance = Fastify({
   logger: true,
@@ -22,7 +22,7 @@ const fastify: FastifyInstance = Fastify({
 
 // Plugins
 fastify.register(autoLoad, {
-  dir: join(__dirname, "plugins"),
+  dir: join(__dirname, 'plugins'),
 });
 
 fastify.register(fastifySwaggerUIPlugin);

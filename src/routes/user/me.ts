@@ -1,11 +1,11 @@
-import { FastifyPluginCallback } from "fastify";
-import fp from "fastify-plugin";
-import { getAuth, clerkClient } from "@clerk/fastify";
-import { clerkPlugin } from "@clerk/fastify";
+import { FastifyPluginCallback } from 'fastify';
+import fp from 'fastify-plugin';
+import { getAuth, clerkClient } from '@clerk/fastify';
+import { clerkPlugin } from '@clerk/fastify';
 
 export const me: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.get(
-    "/user/me",
+    '/user/me',
     {
       onError: (error, request, reply) => {
         fastify.log.error(error);
@@ -18,7 +18,7 @@ export const me: FastifyPluginCallback = fp((fastify, options, done) => {
         if (!userId) {
           return reply
             .code(403)
-            .send("You must be logged in to view your user profile");
+            .send('You must be logged in to view your user profile');
         }
 
         done();

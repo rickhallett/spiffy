@@ -1,23 +1,27 @@
-'use strict'
+'use strict';
 
-const Ref = require('json-schema-resolver')
-const cloner = require('rfdc')({ proto: true, circles: false })
+const Ref = require('json-schema-resolver');
+const cloner = require('rfdc')({ proto: true, circles: false });
 
-function addHook (fastify, pluginOptions) {
-  const routes = []
-  const sharedSchemasMap = new Map()
+function addHook(fastify, pluginOptions) {
+  const routes = [];
+  const sharedSchemasMap = new Map();
 
   fastify.addHook('onRoute', (routeOptions) => {
-    const routeConfig = routeOptions.config || {}
-    const swaggerConfig = routeConfig.swagger || {}
-    if (routeOptions.method === 'HEAD' && pluginOptions.exposeHeadRoutes !== true && swaggerConfig.exposeHeadRoute !== true) {
-      return
+    const routeConfig = routeOptions.config || {};
+    const swaggerConfig = routeConfig.swagger || {};
+    if (
+      routeOptions.method === 'HEAD' &&
+      pluginOptions.exposeHeadRoutes !== true &&
+      swaggerConfig.exposeHeadRoute !== true
+    ) {
+      return;
     }
 
     if (
       routeOptions.method === 'HEAD' &&
-            routeOptions.schema !== undefined &&
-            routeOptions.schema.operationId !== undefined
+      routeOptions.schema !== undefined &&
+      routeOptions.schema.operationId !== undefined
     ) {
       routes.push(
         // If two routes with operationId are added to the swagger
@@ -25,15 +29,15 @@ function addHook (fastify, pluginOptions) {
         // therefore we suffix the operationId with `-head`.
         Object.assign({}, routeOptions, {
           schema: Object.assign({}, routeOptions.schema, {
-            operationId: `${routeOptions.schema.operationId}-head`
-          })
+            operationId: `${routeOptions.schema.operationId}-head`,
+          }),
         })
-      )
-      return
+      );
+      return;
     }
 
-    routes.push(routeOptions)
-  })
+    routes.push(routeOptions);
+  });
 
   fastify.addHook('onRegister', async (instance) => {
     // we need to wait the ready event to get all the .getSchemas()
@@ -42,36 +46,38 @@ function addHook (fastify, pluginOptions) {
     // when schemaId is the same in difference instance
     // the latter will lost
     instance.addHook('onReady', (done) => {
-      const allSchemas = instance.getSchemas()
+      const allSchemas = instance.getSchemas();
       for (const schemaId of Object.keys(allSchemas)) {
-        sharedSchemasMap.set(schemaId, allSchemas[schemaId])
+        sharedSchemasMap.set(schemaId, allSchemas[schemaId]);
       }
-      done()
-    })
-  })
+      done();
+    });
+  });
 
   fastify.addHook('onReady', (done) => {
-    const allSchemas = fastify.getSchemas()
+    const allSchemas = fastify.getSchemas();
     for (const schemaId of Object.keys(allSchemas)) {
       // it is the top-level, we do not expect to have duplicate id
-      sharedSchemasMap.set(schemaId, allSchemas[schemaId])
+      sharedSchemasMap.set(schemaId, allSchemas[schemaId]);
     }
-    done()
-  })
+    done();
+  });
 
   return {
     routes,
-    Ref () {
-      const externalSchemas = cloner(Array.from(sharedSchemasMap.values()))
-      return Ref(Object.assign(
-        { applicationUri: 'todo.com' },
-        pluginOptions.refResolver,
-        { clone: true, externalSchemas })
-      )
-    }
-  }
+    Ref() {
+      const externalSchemas = cloner(Array.from(sharedSchemasMap.values()));
+      return Ref(
+        Object.assign(
+          { applicationUri: 'todo.com' },
+          pluginOptions.refResolver,
+          { clone: true, externalSchemas }
+        )
+      );
+    },
+  };
 }
 
 module.exports = {
-  addHook
-}
+  addHook,
+};

@@ -1,22 +1,22 @@
-import { FastifyPluginCallback } from "fastify";
-import fp from "fastify-plugin";
+import { FastifyPluginCallback } from 'fastify';
+import fp from 'fastify-plugin';
 
 export const getPing: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.route({
-    method: "GET",
-    url: "/ping",
+    method: 'GET',
+    url: '/ping',
     schema: {
       response: {
         200: {
-          type: "object",
+          type: 'object',
           properties: {
-            ping: { type: "string" },
+            ping: { type: 'string' },
           },
         },
       },
     },
     handler: function (request, reply) {
-      reply.send({ ping: "Server running!" });
+      reply.send({ ping: 'Server running!' });
     },
   });
 

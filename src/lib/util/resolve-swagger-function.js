@@ -1,13 +1,13 @@
-'use strict'
+'use strict';
 
-function resolveSwaggerFunction (opts, cache, routes, Ref, done) {
+function resolveSwaggerFunction(opts, cache, routes, Ref, done) {
   if (typeof opts.openapi === 'undefined' || opts.openapi === null) {
-    return require('../spec/swagger')(opts, cache, routes, Ref, done)
+    return require('../spec/swagger')(opts, cache, routes, Ref, done);
   } else {
-    return require('../spec/openapi')(opts, cache, routes, Ref, done)
+    return require('../spec/openapi')(opts, cache, routes, Ref, done);
   }
 }
 
 module.exports = {
-  resolveSwaggerFunction
-}
+  resolveSwaggerFunction,
+};

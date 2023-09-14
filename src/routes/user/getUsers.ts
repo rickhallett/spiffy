@@ -1,12 +1,12 @@
-import { FastifyPluginCallback } from "fastify";
-import fp from "fastify-plugin";
-import { getAuth, clerkClient } from "@clerk/fastify";
-import { clerkPlugin } from "@clerk/fastify";
+import { FastifyPluginCallback } from 'fastify';
+import fp from 'fastify-plugin';
+import { getAuth, clerkClient } from '@clerk/fastify';
+import { clerkPlugin } from '@clerk/fastify';
 
 export const getUsers: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.register(clerkPlugin);
   fastify.get(
-    "/user/all",
+    '/user/all',
     {
       onError: (error, request, reply) => {
         fastify.log.error(error);
@@ -19,7 +19,7 @@ export const getUsers: FastifyPluginCallback = fp((fastify, options, done) => {
         if (!userId) {
           return reply
             .code(403)
-            .send("You must be logged in to view all users");
+            .send('You must be logged in to view all users');
         }
 
         const user = userId ? await clerkClient.users.getUser(userId) : null;
@@ -30,7 +30,7 @@ export const getUsers: FastifyPluginCallback = fp((fastify, options, done) => {
       const users = await clerkClient.users.getUserList();
 
       if (users.length === 0) {
-        reply.status(404).send({ error: "No users available" });
+        reply.status(404).send({ error: 'No users available' });
       }
 
       reply.status(200).send({ users });

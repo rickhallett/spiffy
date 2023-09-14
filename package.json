@@ -9,7 +9,7 @@
     "start": "nodemon ./dist/index.js",
     "compile-schemas": "json2ts -i ./src/schemas -o ./src/types",
     "watch:tsc": "tsc -p tsconfig.json --watch",
-    "lint:prettier": "prettier -w ."
+    "format": "prettier -w ."
   },
   "keywords": [],
   "author": "rickhallett",
