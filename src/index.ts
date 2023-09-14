@@ -1,5 +1,4 @@
 import Fastify, { FastifyInstance } from "fastify";
-// import type * as global from "./global.d.ts";
 import { getPing } from "./routes/utils/getPing";
 import { createUser } from "./routes/auth/createUser";
 import { queryParamLogin } from "./routes/auth/queryParamLogin";
@@ -15,14 +14,11 @@ const fastify: FastifyInstance = Fastify(
   {}
 ).withTypeProvider<TypeBoxTypeProvider>();
 
-// fastify.register(autoLoad, {
-//   dir: join(__dirname, "plugins"),
-// });
+fastify.register(autoLoad, {
+  dir: join(__dirname, "plugins"),
+});
 
 fastify.register(import("@fastify/routes"));
-
-fastify.register(prismaPlugin);
-fastify.register(fastifySwaggerPlugin);
 fastify.register(fastifySwaggerUIPlugin);
 
 fastify.register(getPing);
@@ -39,7 +35,7 @@ fastify.listen({ port: 8080 }, (err, address) => {
 
   startSwagger();
 
-  console.log(fastify.printRoutes({ includeHooks: true }));
+  console.log(fastify.printRoutes());
   console.log(fastify.printPlugins());
   // console.log(fastify.routes);
 });
