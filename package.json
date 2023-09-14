@@ -6,10 +6,11 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "npm run build && nodemon ./dist/index.js",
+    "start": "nodemon ./dist/index.js",
     "compile-schemas": "json2ts -i ./src/schemas -o ./src/types",
     "watch:tsc": "tsc -p tsconfig.json --watch",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "deploy": "npx prisma migrate deploy && npm run build && npm run start"
   },
   "keywords": [],
   "author": "rickhallett",

@@ -13,11 +13,10 @@ datasource db {
 model User {
   id       Int    @id @default(autoincrement())
   email    String @unique
-  name     String
-  password String
+  username String
   Todo     Todo[]
 
-  @@index([name], name: "name")
+  @@index([username], name: "username")
 }
 
 model Todo {
