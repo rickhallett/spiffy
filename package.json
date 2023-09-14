@@ -11,7 +11,7 @@
     "compile-schemas": "json2ts -i ./src/schemas -o ./src/types",
     "watch:tsc": "tsc -p tsconfig.json --watch",
     "format": "prettier -w .",
-    "deploy": "npx prisma migrate deploy && npx prisma generate && npm run start:heroku"
+    "deploy": "npx prisma db push && npx prisma generate && npm run start:heroku"
   },
   "keywords": [],
   "author": "rickhallett",
