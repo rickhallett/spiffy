@@ -41,18 +41,24 @@ fastify.register(root);
 
 // Init Fastify server
 const PORT = parseInt(process.env.PORT) || 8080;
-fastify.listen({ port: PORT }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
+fastify.listen(
+  {
+    port: PORT,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+  },
+  (err, address) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    console.log(`Server listening at ${address}`);
+
+    startSwagger();
+
+    console.log(fastify.printRoutes());
+    // console.log(fastify.printPlugins());
   }
-  console.log(`Server listening at ${address}`);
-
-  startSwagger();
-
-  console.log(fastify.printRoutes());
-  // console.log(fastify.printPlugins());
-});
+);
 
 async function startSwagger() {
   try {
