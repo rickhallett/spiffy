@@ -72,6 +72,9 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
     - [ ] Allow users to update the details of a configuration.
     - [ ] Allow deletion of configurations.
 
+    ### Enhanced CRUD (**PRIORITY**)
+    - [ ] Allow creation of Incidents, Vulnerabilities, Assets, and Configurations with both new and existing data entries
+
     [:point_up:](#table-of-contents)
 
     ---
