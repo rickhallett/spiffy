@@ -147,6 +147,7 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
 
     ## TODO
 
+    - [ ] PRIORITY: **encapsulate all CRUD routes into plugins**
     - [ ] add auth layer (Clerk has some free tier limitations...)
     - [ ] add Strange Beings phrase to English conversion
     - [x] Use fastify route print out to automatically update README declaration of routes
