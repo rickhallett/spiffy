@@ -4,7 +4,7 @@ import fp from 'fastify-plugin';
 export const getPing: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.route({
     method: 'GET',
-    url: '/ping',
+    url: '/api/v1/ping',
     schema: {
       response: {
         200: {

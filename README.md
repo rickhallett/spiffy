@@ -22,22 +22,7 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
 
 ## Routes
 
-```bash
-└── /
-    ├── docs (GET, HEAD)
-    │   └── / (GET, HEAD)
-    │       ├── static/
-    │       │   ├── index.html (GET, HEAD)
-    │       │   ├── swagger-initializer.js (GET, HEAD)
-    │       │   └── * (HEAD, GET)
-    │       ├── json (GET, HEAD)
-    │       ├── yaml (GET, HEAD)
-    │       └── * (GET, HEAD)
-    ├── ping (GET, HEAD)
-    ├── user (POST)
-    ├── auth (GET, HEAD)
-    └── todo (POST)
-```
+[Routes](./routes.txt)
 
 ## TODO
 

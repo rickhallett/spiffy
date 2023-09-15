@@ -5,7 +5,7 @@ import { clerkPlugin } from '@clerk/fastify';
 
 export const me: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.get(
-    '/user/me',
+    '/api/v1/user/me',
     {
       onError: (error, request, reply) => {
         fastify.log.error(error);

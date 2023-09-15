@@ -4,7 +4,7 @@ import fp from 'fastify-plugin';
 
 export const home: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.get(
-    '/home',
+    '/api/v1/home',
     {
       onResponse: (request, reply) => {
         const milliseconds = reply.getResponseTime();

@@ -4,7 +4,7 @@ const fp = require('fastify-plugin');
 
 function fastifySwaggerUI(fastify, opts, next) {
   fastify.register(require('@fastify/swagger-ui'), {
-    routePrefix: '/docs',
+    routePrefix: '/api/v1/docs',
     swagger: {
       info: {
         title: 'My FirstAPP Documentation',
@@ -75,7 +75,7 @@ function fastifySwaggerUI(fastify, opts, next) {
   next();
 }
 
-module.exports.fastifySwaggerUIPlugin = fp(fastifySwaggerUI, {
+export default fp(fastifySwaggerUI, {
   fastify: '4.x',
   name: '@fastify/swagger',
 });

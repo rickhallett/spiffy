@@ -4,7 +4,7 @@ import { UserType, User } from '../../typebox/User';
 import { getAuth, clerkClient } from '@clerk/fastify';
 
 export const signout: FastifyPluginCallback = fp((fastify, options, done) => {
-  fastify.get('/auth/signout', async (request, reply) => {
+  fastify.get('/api/v1/auth/signout', async (request, reply) => {
     reply.redirect('https://fresh-tetra-83.accounts.dev/user');
     const user = await clerkClient.users.getUser(
       getAuth(request).userId as string

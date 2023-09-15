@@ -7,6 +7,23 @@ import {
 } from 'fastify';
 import { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
+import { FastifyPlugin } from 'fastify';
+
+interface BlippOptions {
+  blippLog?: (message: string) => void;
+}
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    blipp: () => void;
+  }
+}
+declare const fastifyBlipp: FastifyPlugin<BlippOptions>;
+
+export default fastifyBlipp;
+
+declare module 'fastify-crud-generator' {}
+
 /**
  * Swagger-UI Vendor Extensions
  * @see https://support.smartbear.com/swaggerhub/docs/apis/vendor-extensions.html#api-docs-x-tokenname
