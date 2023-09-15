@@ -50,3 +50,4 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
 7. Find out which parts of Swagger files I do not need for dynamic generation of routes
 8. Improve logger at init and runtime
 9. Configure separate formatter for markdown
+10. Get custom domain to host Clerk services on Heroku

@@ -28,16 +28,53 @@ fastify.register(fastifySwaggerUIPlugin);
 
 // Routes
 fastify.register(getPing);
-fastify.register(createUser);
-fastify.register(getUsers);
+// fastify.register(createUser);
+// fastify.register(getUsers);
 fastify.register(me);
 
 fastify.register(queryParamLogin);
-fastify.register(createTodo);
-fastify.register(register);
-fastify.register(login);
+// fastify.register(createTodo);
+// fastify.register(register);
+// fastify.register(login);
 fastify.register(home);
 fastify.register(root);
+
+const crud = require('fastify-crud-generator');
+
+fastify
+  .register(crud, {
+    prefix: '/comment',
+    controller: {
+      create: async (request, reply) => {},
+      read: async (request, reply) => {},
+      update: async (request, reply) => {},
+      delete: async (request, reply) => {},
+      view: async (request, reply) => {},
+      list: async (request, reply) => {},
+    },
+  })
+  .register(crud, {
+    prefix: '/post',
+    controller: {
+      create: async (request, reply) => {},
+      read: async (request, reply) => {},
+      update: async (request, reply) => {},
+      delete: async (request, reply) => {},
+      view: async (request, reply) => {},
+      list: async (request, reply) => {},
+    },
+  })
+  .register(crud, {
+    prefix: '/user',
+    controller: {
+      create: async (request, reply) => {},
+      read: async (request, reply) => {},
+      update: async (request, reply) => {},
+      delete: async (request, reply) => {},
+      view: async (request, reply) => {},
+      list: async (request, reply) => {},
+    },
+  });
 
 // Init Fastify server
 const PORT = parseInt(process.env.PORT) || 8080;
