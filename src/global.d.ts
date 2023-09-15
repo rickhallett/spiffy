@@ -1,4 +1,6 @@
+import { registerControllers } from '@routes/fastify-crud-generator';
 import {
+  FastifyInstance,
   FastifyPluginCallback,
   FastifySchema,
   RouteOptions,
@@ -7,7 +9,7 @@ import {
 } from 'fastify';
 import { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
-import { FastifyPlugin } from 'fastify';
+import { FastifyPlugin, FastifyInstance } from 'fastify';
 
 interface BlippOptions {
   blippLog?: (message: string) => void;
@@ -16,13 +18,12 @@ interface BlippOptions {
 declare module 'fastify' {
   interface FastifyInstance {
     blipp: () => void;
+    registerControllers: () => void;
   }
 }
 declare const fastifyBlipp: FastifyPlugin<BlippOptions>;
 
 export default fastifyBlipp;
-
-declare module 'fastify-crud-generator' {}
 
 /**
  * Swagger-UI Vendor Extensions

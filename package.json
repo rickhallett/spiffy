@@ -39,6 +39,7 @@
     "fastify-plugin": "^4.5.1",
     "json-schema-to-ts": "^2.9.2",
     "json-schema-to-typescript": "^13.1.1",
+    "module-alias": "^2.2.3",
     "mongodb": "^6.0.0",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",
@@ -50,5 +51,10 @@
     "@tsconfig/node18": "^18.2.1",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.6.0"
+  },
+  "_moduleAliases": {
+    "@root": "dist/",
+    "@routes": "dist/routes",
+    "@plugins": "dist/plugins"
   }
 }
