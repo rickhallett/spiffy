@@ -14,6 +14,14 @@ import { root } from '@routes/root';
 import { me } from '@routes/user/me';
 import { registerControllers } from '@routes/register-controllers';
 import { startSwagger } from '@docs/start-swagger';
+import {
+  seedUsers,
+  seedLogs,
+  seedAssets,
+  seedConfigurations,
+  seedRoles,
+  linkUsersToRole,
+} from './seed-db';
 
 export const fastify: FastifyInstance = Fastify({
   logger: true,
@@ -46,25 +54,30 @@ fastify.registerControllers();
 
 // Init Fastify server
 const PORT = parseInt(process.env.PORT) || 8080;
-fastify
-  // .get('/', (req, reply) => {})
-  .listen(
-    {
-      port: PORT,
-      host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
-    },
-    (err, address) => {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-      console.log(`Server listening at ${address}`);
-
-      startSwagger();
-
-      fastify.blipp();
-
-      // console.log(fastify.printRoutes());
-      // console.log(fastify.printPlugins());
+fastify.listen(
+  {
+    port: PORT,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+  },
+  async (err, address) => {
+    if (err) {
+      console.error(err);
+      process.exit(1);
     }
-  );
+    console.log(`Server listening at ${address}`);
+
+    startSwagger();
+
+    fastify.blipp();
+
+    // await seedUsers();
+    // await seedLogs();
+    // await seedAssets();
+    // await seedConfigurations();
+    // await seedRoles();
+    // await linkUsersToRole();
+
+    // console.log(fastify.printRoutes());
+    // console.log(fastify.printPlugins());
+  }
+);
