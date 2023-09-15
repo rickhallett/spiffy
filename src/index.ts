@@ -41,6 +41,7 @@ fastify.register(login);
 fastify.register(home);
 fastify.register(root);
 
+// TODO: encapsulate crud routes into system of plugins
 fastify
   .register(crud, {
     prefix: '/api/v1/user',
