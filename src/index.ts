@@ -73,7 +73,18 @@ fastify
 
         return reply.status(200).send(user);
       },
-      view: async (req, reply) => {},
+      view: async (req, reply) => {
+        const user = await fastify.prisma.user.findUnique({
+          where: { id: req.params.id as string },
+          include: { roles: true },
+        });
+
+        if (!user) {
+          return reply.status(400).send('User not found');
+        }
+
+        return reply.status(200).send(user);
+      },
       update: async (req, reply) => {},
       delete: async (req, reply) => {},
     },
