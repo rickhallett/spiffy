@@ -55,6 +55,7 @@
   "_moduleAliases": {
     "@root": "dist/",
     "@routes": "dist/routes",
-    "@plugins": "dist/plugins"
+    "@plugins": "dist/plugins",
+    "@docs": "dist/docs"
   }
 }

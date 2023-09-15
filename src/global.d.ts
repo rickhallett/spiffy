@@ -1,4 +1,4 @@
-import { registerControllers } from '@routes/fastify-crud-generator';
+import { registerControllers } from '@routes/register-controllers';
 import {
   FastifyInstance,
   FastifyPluginCallback,

@@ -1,19 +1,19 @@
-import fp from 'fastify-plugin';
 import 'module-alias/register';
 import Fastify, { FastifyInstance } from 'fastify';
-import { getPing } from '@routes/utils/get-ping';
+import { join } from 'path';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoLoad from '@fastify/autoload';
 import { fastifyBcrypt } from 'fastify-bcrypt';
-import { join } from 'path';
-import fastifySwaggerUIPlugin from './lib/spec/swagger/html';
 import 'dotenv/config';
+import fastifySwaggerUIPlugin from './lib/spec/swagger/html';
+import { getPing } from '@routes/utils/get-ping';
 import { register } from '@routes/auth/register';
 import { home } from '@routes/home/home';
 import { login } from '@routes/auth/login';
 import { root } from '@routes/root';
 import { me } from '@routes/user/me';
-import { registerControllers } from '@routes/fastify-crud-generator';
+import { registerControllers } from '@routes/register-controllers';
+import { startSwagger } from '@docs/start-swagger';
 
 export const fastify: FastifyInstance = Fastify({
   logger: true,
@@ -68,12 +68,3 @@ fastify
       // console.log(fastify.printPlugins());
     }
   );
-
-async function startSwagger() {
-  try {
-    await fastify.ready();
-    fastify.swagger();
-  } catch (err) {
-    fastify.log.error(err);
-  }
-}
