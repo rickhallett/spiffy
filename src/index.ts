@@ -11,9 +11,6 @@ import { login } from './routes/auth/login';
 import { root } from './routes/root';
 import { me } from './routes/user/me';
 import crud from 'fastify-crud-generator';
-import { writeFileSync, openSync, closeSync, writeFile } from 'fs';
-// const blippPlugin = require('fastify-blipp');
-// import blippPlugin from "fastify-blipp";
 import { fastifyBcrypt } from 'fastify-bcrypt';
 
 const fastify: FastifyInstance = Fastify({

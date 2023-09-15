@@ -1,7 +1,6 @@
 import { FastifyPluginCallback } from 'fastify';
 import fp from 'fastify-plugin';
 import { getAuth, clerkClient } from '@clerk/fastify';
-import { clerkPlugin } from '@clerk/fastify';
 
 export const me: FastifyPluginCallback = fp((fastify, options, done) => {
   fastify.get(
