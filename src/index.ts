@@ -14,6 +14,7 @@ import crud from 'fastify-crud-generator';
 import { writeFileSync, openSync, closeSync, writeFile } from 'fs';
 // const blippPlugin = require('fastify-blipp');
 // import blippPlugin from "fastify-blipp";
+import { fastifyBcrypt } from 'fastify-bcrypt';
 
 const fastify: FastifyInstance = Fastify({
   logger: true,
@@ -21,6 +22,9 @@ const fastify: FastifyInstance = Fastify({
 
 fastify.register(import('fastify-markdown'), { data: true });
 fastify.register(import('fastify-blipp'));
+fastify.register(fastifyBcrypt, {
+  saltWorkFactor: 12,
+});
 
 // Plugins
 fastify.register(autoLoad, {
@@ -31,17 +35,11 @@ fastify.register(fastifySwaggerUIPlugin);
 
 // Routes
 fastify.register(getPing);
-// fastify.register(createUser);
-// fastify.register(getUsers);
 fastify.register(me);
-
-// fastify.register(createTodo);
-// fastify.register(register);
-// fastify.register(login);
+fastify.register(register);
+fastify.register(login);
 fastify.register(home);
 fastify.register(root);
-
-// const crud = require('fastify-crud-generator');
 
 fastify
   .register(crud, {
@@ -61,9 +59,9 @@ fastify
       create: async (req, reply) => {
         const user = await fastify.prisma.user.create({
           data: {
-            email: 'test@test.com',
-            password: 'test',
-            roles: { create: { name: 'admin' } },
+            email: req.body.email,
+            password: await fastify.bcrypt.hash(req.body.password),
+            roles: { create: { name: req.body.role } },
           },
         });
 
@@ -85,7 +83,56 @@ fastify
 
         return reply.status(200).send(user);
       },
-      update: async (req, reply) => {},
+      update: async (req, reply) => {
+        const email = req.body.email;
+        const password = req.body.password;
+        const role = req.body.role;
+
+        if (email) {
+          const user = await fastify.prisma.user.update({
+            where: { id: req.params.id as string },
+            data: {
+              email: email,
+            },
+          });
+
+          if (!user) {
+            return reply.status(400).send('User email not updated');
+          }
+
+          reply.status(200).send(user);
+        }
+
+        if (password) {
+          const user = await fastify.prisma.user.update({
+            where: { id: req.params.id as string },
+            data: {
+              password: password,
+            },
+          });
+
+          if (!user) {
+            return reply.status(400).send('User password not updated');
+          }
+
+          reply.status(200).send(user);
+        }
+
+        if (role) {
+          const user = await fastify.prisma.user.update({
+            where: { id: req.params.id as string },
+            data: {
+              roles: { create: { name: role } },
+            },
+          });
+
+          if (!user) {
+            return reply.status(400).send('User role not updated');
+          }
+
+          reply.status(200).send(user);
+        }
+      },
       delete: async (req, reply) => {},
     },
   })
