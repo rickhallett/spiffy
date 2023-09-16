@@ -36,29 +36,29 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
     ### User Management
     - [x] Allow users to view their own profile information.
     - [x] Allow users to update their profile information.
-    - [ ] Allow users to delete their account.
+    - [x] Allow users to delete their account.
 
     ### Logs
-    - [ ] Allow users to create a new log entry.
+    - [x] Allow users to create a new log entry.
     - [ ] Retrieve logs based on different filters like log level.
-    - [ ] Allow deletion of logs.
+    - [x] Allow deletion of logs.
 
     ### Alerts
-    - [ ] Allow users to create a new alert.
+    - [x] Allow users to create a new alert.
     - [ ] Retrieve alerts based on different filters like alert level.
-    - [ ] Allow deletion of alerts.
+    - [x] Allow deletion of alerts.
 
     ### Incidents
-    - [ ] Allow users to report a new incident.
+    - [x] Allow users to report a new incident.
     - [ ] Retrieve incidents based on different filters like status.
     - [ ] Allow users to update the status and details of an incident.
-    - [ ] Allow deletion of incidents.
+    - [x] Allow deletion of incidents.
 
     ### Vulnerabilities
-    - [ ] Allow users to add a new vulnerability.
+    - [x] Allow users to add a new vulnerability.
     - [ ] Retrieve vulnerabilities based on different filters like severity.
-    - [ ] Allow users to update the details of a vulnerability.
-    - [ ] Allow deletion of vulnerabilities.
+    - [x] Allow users to update the details of a vulnerability.
+    - [x] Allow deletion of vulnerabilities.
 
     ### Assets
     - [ ] Allow users to add a new asset.
@@ -67,10 +67,10 @@ Familiarising with the Fastify API framework, plugin ecosystem, Prisma ORM
     - [ ] Allow deletion of assets.
 
     ### Configurations
-    - [ ] Allow users to add a new configuration for an asset.
+    - [x] Allow users to add a new configuration for an asset.
     - [ ] Retrieve configurations based on different filters.
-    - [ ] Allow users to update the details of a configuration.
-    - [ ] Allow deletion of configurations.
+    - [x] Allow users to update the details of a configuration.
+    - [x] Allow deletion of configurations.
 
     ### Enhanced CRUD (**PRIORITY**)
     - [ ] Allow creation of Incidents, Vulnerabilities, Assets, and Configurations with both new and existing data entries
