@@ -21,6 +21,7 @@ import {
   seedConfigurations,
   seedRoles,
   linkUsersToRole,
+  seedIncidents,
 } from './seed-db';
 
 export const fastify: FastifyInstance = Fastify({
@@ -76,6 +77,7 @@ fastify.listen(
     // await seedConfigurations();
     // await seedRoles();
     // await linkUsersToRole();
+    // await seedIncidents();
 
     // console.log(fastify.printRoutes());
     // console.log(fastify.printPlugins());

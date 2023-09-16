@@ -143,6 +143,7 @@ function createRandomAlert() {
       AlertLevel.HIGH,
       AlertLevel.CRITICAL,
     ]),
+    // user: { connect: { id: userId } },
     // Incident: createRandomIncident(),
   } as Alert;
 }
@@ -338,13 +339,15 @@ export async function linkUsersToRole() {
 }
 
 export async function seedIncidents() {
+  const users = await fastify.prisma.user.findMany();
   let count = 0;
   for (const incident of incidents) {
     await fastify.prisma.incident.create({
       data: {
+        user: { connect: { id: users[count].id } },
         title: incident.title,
         status: incident.status as any,
-        alerts: { create: createRandomAlert() as never },
+        // alerts: { create: createRandomAlert(users[count].id) as any },
       },
     });
     count++;
