@@ -1,7 +1,31 @@
 import { fastify } from '@root/index';
+import { LogLevel } from '@prisma/client';
 
 export async function list(req, reply) {
-  const logs = await fastify.prisma.log.findMany();
+  const filter = req.query.levels as string;
+  const levels = filter ? filter.split(',') : [];
+
+  const validLevels = ['INFO', 'WARN', 'ERROR', 'DEBUG'];
+
+  const filteredLevels = levels.filter((level) =>
+    validLevels.includes(level.toUpperCase())
+  );
+
+  if (filteredLevels.length !== levels.length) {
+    return reply
+      .status(400)
+      .send(
+        `One or more invalid log levels: [${levels}]. Valid levels are: [${validLevels}]`
+      );
+  }
+
+  const logs = await fastify.prisma.log.findMany({
+    where: {
+      level: {
+        in: levels as LogLevel[],
+      },
+    },
+  });
 
   if (!logs) {
     return reply.status(400).send('Logs not found');
