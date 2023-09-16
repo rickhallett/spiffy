@@ -1,5 +1,5 @@
 import { fastify } from '@root/index';
-import { LogLevel } from '@prisma/client';
+import { Log, LogLevel } from '@prisma/client';
 
 export async function list(req, reply) {
   const filter = req.query.levels as string;
@@ -19,19 +19,25 @@ export async function list(req, reply) {
       );
   }
 
-  const logs = await fastify.prisma.log.findMany({
-    where: {
-      level: {
-        in: levels as LogLevel[],
+  let logs: Log[];
+
+  if (!filter) {
+    logs = await fastify.prisma.log.findMany();
+  } else {
+    logs = await fastify.prisma.log.findMany({
+      where: {
+        level: {
+          in: levels as LogLevel[],
+        },
       },
-    },
-  });
+    });
+  }
 
   if (!logs) {
     return reply.status(400).send('Logs not found');
   }
 
-  return reply.status(200).send(logs);
+  return reply.status(200).send({ filter, levels, logs });
 }
 
 export async function create(req, reply) {
