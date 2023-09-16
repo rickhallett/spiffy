@@ -1,6 +1,12 @@
 import { fastify } from '@root/index';
 import { Log, LogLevel } from '@prisma/client';
 
+/**
+ * @swagger
+ * /log:
+ *   list:
+ *     summary: Retrieve a list of logs
+ */
 export async function list(req, reply) {
   const filter = req.query.levels as string;
   const levels = filter ? filter.split(',') : [];
@@ -11,12 +17,14 @@ export async function list(req, reply) {
     validLevels.includes(level.toUpperCase())
   );
 
-  if (filteredLevels.length !== levels.length) {
-    return reply
-      .status(400)
-      .send(
-        `One or more invalid log levels: [${levels}]. Valid levels are: [${validLevels}]`
-      );
+  const invalidLevels = levels.filter(
+    (level) => !validLevels.includes(level.toUpperCase())
+  );
+
+  if (invalidLevels.length > 0) {
+    return reply.notFound(
+      `Invalid log levels: [${invalidLevels}]. Valid levels are: [${validLevels}]`
+    );
   }
 
   let logs: Log[];
@@ -34,7 +42,7 @@ export async function list(req, reply) {
   }
 
   if (!logs) {
-    return reply.status(400).send('Logs not found');
+    return reply.notFound('Logs not found');
   }
 
   return reply.status(200).send({ filter, levels, logs });

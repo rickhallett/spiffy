@@ -14,23 +14,22 @@ import { root } from '@routes/root';
 import { me } from '@routes/user/me';
 import { registerControllers } from '@routes/register-controllers';
 import { startSwagger } from '@docs/start-swagger';
-import {
-  seedUsers,
-  seedLogs,
-  seedAssets,
-  seedConfigurations,
-  seedRoles,
-  linkUsersToRole,
-  seedIncidents,
-} from './seed-db';
+import { summary } from '@routes/check/summary';
+import createAlertJob from './tasks/createAlert';
 
 export const fastify: FastifyInstance = Fastify({
-  logger: true,
+  logger: {
+    transport: {
+      target: '@fastify/one-line-logger',
+    },
+  },
 }).withTypeProvider<TypeBoxTypeProvider>();
 
 // Plugins
 fastify.register(import('fastify-markdown'), { data: true });
 fastify.register(import('fastify-blipp'));
+fastify.register(import('@fastify/sensible'));
+fastify.register(import('@fastify/schedule'));
 fastify.register(fastifyBcrypt, {
   saltWorkFactor: 12,
 });
@@ -46,6 +45,7 @@ fastify.register(register);
 fastify.register(login);
 fastify.register(home);
 fastify.register(root);
+fastify.register(summary);
 
 // Decorators
 fastify.decorate('registerControllers', registerControllers);
@@ -53,11 +53,14 @@ fastify.decorate('registerControllers', registerControllers);
 // CRUD Routes
 fastify.registerControllers();
 
+fastify.ready().then(() => {
+  fastify.scheduler.addSimpleIntervalJob(createAlertJob);
+});
+
 // Init Fastify server
-const PORT = parseInt(process.env.PORT) || 8080;
 fastify.listen(
   {
-    port: PORT,
+    port: parseInt(process.env.PORT) || 8080,
     host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
   },
   async (err, address) => {
@@ -70,16 +73,5 @@ fastify.listen(
     startSwagger();
 
     fastify.blipp();
-
-    // await seedUsers();
-    // await seedLogs();
-    // await seedAssets();
-    // await seedConfigurations();
-    // await seedRoles();
-    // await linkUsersToRole();
-    // await seedIncidents();
-
-    // console.log(fastify.printRoutes());
-    // console.log(fastify.printPlugins());
   }
 );
