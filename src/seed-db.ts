@@ -121,19 +121,6 @@ function createRandomLog() {
   } as Log;
 }
 
-function createRandomIncident() {
-  return {
-    title: faker.lorem.sentence(),
-    status: faker.helpers.arrayElement([
-      IncidentStatus.OPEN,
-      IncidentStatus.IN_PROGRESS,
-      IncidentStatus.RESOLVED,
-      IncidentStatus.CLOSED,
-    ]),
-    alerts: faker.helpers.multiple(createRandomAlert, { count: 3 }),
-  } as Incident;
-}
-
 function createRandomAlert() {
   return {
     message: faker.lorem.sentence(),
