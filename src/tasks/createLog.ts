@@ -11,6 +11,10 @@ const createRandomLog = new AsyncTask(
         where: { email: { contains: randomLetter() } },
       })
       .then((user) => {
+        if (!user) {
+          throw new Error('User not found. Log not created.');
+        }
+
         fastify.prisma.log
           .create({
             data: {

@@ -25,6 +25,10 @@ const task = new AsyncTask(
         where: { email: { contains: randomLetter() } },
       })
       .then((user) => {
+        if (!user) {
+          throw new Error('User not found. Alert not created.');
+        }
+
         fastify.prisma.alert
           .create({
             data: createRandomAlert(user.id),
