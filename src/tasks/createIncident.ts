@@ -1,12 +1,10 @@
-// create a task that creates an incident every 20 seconds and links it to a random user, similarly to createAlert.ts
-
 import { SimpleIntervalJob, AsyncTask } from 'toad-scheduler';
 import { fastify } from '@root/index';
 import { faker } from '@faker-js/faker';
 import { randomLetter } from '@root/utils/randomLetter';
-import { Incident, IncidentStatus, AlertLevel } from '@prisma/client';
+import { IncidentStatus, AlertLevel, Alert } from '@prisma/client';
 
-function createRandomAlert(userId) {
+function createRandomAlert(userId: string) {
   return {
     message: faker.lorem.sentence(),
     level: faker.helpers.arrayElement([
@@ -14,12 +12,12 @@ function createRandomAlert(userId) {
       AlertLevel.MEDIUM,
       AlertLevel.HIGH,
       AlertLevel.CRITICAL,
-    ]),
-    user: { connect: { id: userId } },
-  };
+    ]) as AlertLevel,
+    userId,
+  } as Alert;
 }
 
-function createRandomIncidentHelper(userId) {
+function createRandomIncidentHelper(userId: string) {
   return {
     title: faker.lorem.sentence(),
     status: faker.helpers.arrayElement([
@@ -27,9 +25,9 @@ function createRandomIncidentHelper(userId) {
       IncidentStatus.IN_PROGRESS,
       IncidentStatus.RESOLVED,
       IncidentStatus.CLOSED,
-    ]),
-    alerts: createRandomAlert(userId),
-    user: { connect: { id: userId } },
+    ]) as IncidentStatus,
+    alerts: { create: createRandomAlert(userId) },
+    userId,
   };
 }
 
@@ -42,12 +40,12 @@ const createRandomIncident = new AsyncTask(
       })
       .then((user) => {
         if (!user) {
-          throw new Error('User not found');
+          throw new Error('User not found. Incident not created.');
         }
 
         fastify.prisma.incident
           .create({
-            data: createRandomIncidentHelper(user.id) as any,
+            data: createRandomIncidentHelper(user.id),
           })
           .then((incident) => {
             fastify.log.info(`Created incident: ${incident.id}`);
@@ -60,7 +58,7 @@ const createRandomIncident = new AsyncTask(
 );
 
 const createIncidentJob = new SimpleIntervalJob(
-  { seconds: 20 },
+  { seconds: 18 },
   createRandomIncident
 );
 

@@ -39,6 +39,6 @@ const task = new AsyncTask(
   }
 );
 
-const createAlertJob = new SimpleIntervalJob({ seconds: 20 }, task);
+const createAlertJob = new SimpleIntervalJob({ seconds: 15 }, task);
 
 export default createAlertJob;

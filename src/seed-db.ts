@@ -183,7 +183,7 @@ function createRandomAsset() {
   };
 }
 
-function createRandomRole() {
+export function createRandomRole() {
   return faker.helpers.arrayElement([
     RoleType.ADMIN,
     RoleType.GUEST,
@@ -192,7 +192,7 @@ function createRandomRole() {
   ]);
 }
 
-function createRandomUser() {
+export function createRandomUser() {
   return {
     email: faker.internet.email(),
     password: faker.internet.password({ length: 21 }),
@@ -228,16 +228,6 @@ export async function seedUsers() {
             level: logs[count].level as any,
           },
         },
-        // alerts: {
-        //   create: {
-        //     message:
-        //       user.alerts[faker.helpers.rangeToNumber({ min: 0, max: 2 })]
-        //         .message,
-        //     level: user.alerts[count].level as any,
-        //     Incident: { create: createRandomIncident() as never },
-        //   },
-        // },
-        // incidents: { create: createRandomIncident() as never },
       },
     });
     count++;

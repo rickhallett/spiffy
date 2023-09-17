@@ -18,6 +18,7 @@ import { summary } from '@routes/check/summary';
 import createAlertJob from './tasks/createAlert';
 import createLogJob from './tasks/createLog';
 import createIncidentJob from './tasks/createIncident';
+import createUserJob from './tasks/createUser';
 
 export const fastify: FastifyInstance = Fastify({
   logger: {
@@ -58,7 +59,8 @@ fastify.registerControllers();
 fastify.ready().then(() => {
   fastify.scheduler.addSimpleIntervalJob(createAlertJob);
   fastify.scheduler.addSimpleIntervalJob(createLogJob);
-  // fastify.scheduler.addSimpleIntervalJob(createIncidentJob);
+  fastify.scheduler.addSimpleIntervalJob(createIncidentJob);
+  fastify.scheduler.addSimpleIntervalJob(createUserJob);
 });
 
 // Init Fastify server
