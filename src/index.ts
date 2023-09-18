@@ -1,24 +1,24 @@
+import FastifyAuth from '@fastify/auth';
 import 'module-alias/register';
 import Fastify, { FastifyInstance } from 'fastify';
 import { join } from 'path';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoLoad from '@fastify/autoload';
-import { fastifyBcrypt } from 'fastify-bcrypt';
 import 'dotenv/config';
 import fastifySwaggerUIPlugin from './lib/spec/swagger/html';
 import { getPing } from '@routes/utils/get-ping';
-import { register } from '@routes/auth/register';
 import { home } from '@routes/home/home';
-import { login } from '@routes/auth/login';
 import { root } from '@routes/root';
-import { me } from '@routes/user/me';
 import { registerControllers } from '@routes/register-controllers';
 import { startSwagger } from '@docs/start-swagger';
 import { summary } from '@routes/check/summary';
-import createAlertJob from './tasks/createAlert';
-import createLogJob from './tasks/createLog';
-import createIncidentJob from './tasks/createIncident';
-import createUserJob from './tasks/createUser';
+import usersRoutes from '@routes/user/user-routes';
+import {
+  asyncVerifyJWT,
+  asyncVerifyUsernameAndPassword,
+} from '@routes/user/user-routes';
+
+export const saltRounds = 12;
 
 export const fastify: FastifyInstance = Fastify({
   logger: {
@@ -29,13 +29,11 @@ export const fastify: FastifyInstance = Fastify({
 }).withTypeProvider<TypeBoxTypeProvider>();
 
 // Plugins
+// fastify.register(FastifyAuth);
 fastify.register(import('fastify-markdown'), { data: true });
 fastify.register(import('fastify-blipp'));
 fastify.register(import('@fastify/sensible'));
 fastify.register(import('@fastify/schedule'));
-fastify.register(fastifyBcrypt, {
-  saltWorkFactor: 12,
-});
 fastify.register(autoLoad, {
   dir: join(__dirname, 'plugins'),
 });
@@ -43,12 +41,11 @@ fastify.register(fastifySwaggerUIPlugin);
 
 // Plugin Routes
 fastify.register(getPing);
-fastify.register(me);
-fastify.register(register);
-fastify.register(login);
 fastify.register(home);
 fastify.register(root);
 fastify.register(summary);
+
+fastify.register(usersRoutes);
 
 // Decorators
 fastify.decorate('registerControllers', registerControllers);
@@ -56,11 +53,34 @@ fastify.decorate('registerControllers', registerControllers);
 // CRUD Routes
 fastify.registerControllers();
 
-fastify.ready().then(() => {
-  fastify.scheduler.addSimpleIntervalJob(createAlertJob);
-  fastify.scheduler.addSimpleIntervalJob(createLogJob);
-  fastify.scheduler.addSimpleIntervalJob(createIncidentJob);
-  fastify.scheduler.addSimpleIntervalJob(createUserJob);
+// fastify.ready().then(() => {
+//   fastify.scheduler.addSimpleIntervalJob(createAlertJob);
+//   fastify.scheduler.addSimpleIntervalJob(createLogJob);
+//   fastify.scheduler.addSimpleIntervalJob(createIncidentJob);
+//   fastify.scheduler.addSimpleIntervalJob(createUserJob);
+// });
+
+fastify.addHook('onRequest', async (request, reply) => {
+  const alreadyAuthenticated = [
+    '/api/v1/login',
+    '/api/v1/register',
+    '/api/v1/profile',
+    '/api/v1/logout',
+  ];
+  if (alreadyAuthenticated.includes(request.url)) {
+    return;
+  }
+
+  try {
+    fastify.auth([fastify.asyncVerifyJWT]);
+  } catch (err) {
+    fastify.log.error(err);
+    reply.status(401).send({ status: 'Unauthorized' });
+  }
+});
+
+fastify.addHook('onError', async (request, reply, error) => {
+  fastify.log.error(error);
 });
 
 // Init Fastify server

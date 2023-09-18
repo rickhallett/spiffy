@@ -1,5 +1,6 @@
-import { fastify } from '@root/index';
+import { fastify, saltRounds } from '@root/index';
 import { fa, faker } from '@faker-js/faker';
+import bcrypt from 'bcrypt';
 // import {
 //   AlertLevel,
 //   IncidentStatus,
@@ -220,7 +221,7 @@ export async function seedUsers() {
     await fastify.prisma.user.create({
       data: {
         email: user.email,
-        password: await fastify.bcrypt.hash(user.password),
+        password: await bcrypt.hash(user.password, saltRounds),
         roles: { create: { name: createRandomRole() } },
         logs: {
           create: {

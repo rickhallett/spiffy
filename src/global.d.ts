@@ -11,6 +11,21 @@ import { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types';
 
 import { FastifyPlugin, FastifyInstance } from 'fastify';
 
+declare module 'fastify' {
+  interface FastifyInstance {
+    asyncVerifyJWT: (request: FastifyRequest, reply: FastifyReply) => void;
+    asyncVerifyUsernameAndPassword: (
+      request: FastifyRequest,
+      reply: FastifyReply
+    ) => void;
+  }
+
+  interface FastifyRequest {
+    user: any;
+    token: string;
+  }
+}
+
 interface BlippOptions {
   blippLog?: (message: string) => void;
 }

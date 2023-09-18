@@ -1,10 +1,12 @@
-import { fastify } from '@root/index';
+import { fastify, saltRounds } from '@root/index';
+import { FastifyRequest } from 'fastify';
+import bcrypt from 'bcrypt';
 
 export async function create(req, reply) {
   const user = await fastify.prisma.user.create({
     data: {
       email: req.body.email,
-      password: await fastify.bcrypt.hash(req.body.password),
+      password: await bcrypt.hash(req.body.password, saltRounds),
       roles: { create: { name: req.body.role } },
     },
   });
@@ -46,7 +48,7 @@ export async function update(req, reply) {
     where: { id: req.params.id },
     data: {
       email: req.body.email,
-      password: await fastify.bcrypt.hash(req.body.password),
+      password: await bcrypt.hash(req.body.password, saltRounds),
       roles: { create: { name: req.body.role } },
     },
   });

@@ -10,7 +10,6 @@ export const root: FastifyPluginCallback = fp((fastify, options, done) => {
       { encoding: 'utf8', flag: 'w' },
       (err) => {
         if (err) throw err;
-        console.log('The file has been saved!');
       }
     );
 
