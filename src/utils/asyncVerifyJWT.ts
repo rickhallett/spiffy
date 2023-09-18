@@ -9,12 +9,13 @@ export const asyncVerifyJWT = async (request, reply) => {
     }
     const token = request.headers.authorization.replace('Bearer ', '');
 
-    const user = await extendedToken.findUserByToken(token);
-    if (!Boolean(user)) {
-      // handles logged out user with valid token
-      throw new Error('Authentication failed!');
+    const lookup = await extendedToken.findUserByToken(token);
+
+    if (lookup instanceof Error) {
+      throw new Error(lookup.message);
     }
-    request.user = user;
+
+    request.user = lookup;
     request.token = token; // used in logout route
   } catch (error) {
     reply.code(401).send(error);

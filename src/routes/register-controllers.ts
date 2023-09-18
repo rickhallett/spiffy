@@ -41,7 +41,7 @@ export const registerControllers = fp((fastify, opts, done) => {
         .register(crud, {
           prefix: '/api/v1/user',
           controller: userControllers,
-          ...getPrehandlers(fastify),
+          // ...getPrehandlers(fastify),
         })
         .register(crud, {
           prefix: '/api/v1/log',

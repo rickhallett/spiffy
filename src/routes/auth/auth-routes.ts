@@ -4,6 +4,7 @@ import { ExtendToken } from '@models/ExtendToken';
 import { ExtendUsers } from '@models/ExtendUsers';
 import bcrypt from 'bcrypt';
 import { saltRounds } from '@root/index';
+import { asyncVerifyJWT } from '@root/utils/asyncVerifyJWT';
 
 interface UserAuthRequest extends FastifyRequest {
   body: {
@@ -18,24 +19,7 @@ const authRoutes = async (fastify: FastifyInstance, options) => {
   const extendedToken = ExtendToken(fastify.prisma.token);
 
   fastify
-    .decorate('asyncVerifyJWT', async (request, reply) => {
-      try {
-        if (!request.headers.authorization) {
-          throw new Error('No token was sent');
-        }
-        const token = request.headers.authorization.replace('Bearer ', '');
-
-        const user = await extendedToken.findUserByToken(token);
-        if (!Boolean(user)) {
-          // handles logged out user with valid token
-          throw new Error('Authentication failed!');
-        }
-        request.user = user;
-        request.token = token; // used in logout route
-      } catch (error) {
-        reply.code(401).send(error);
-      }
-    })
+    .decorate('asyncVerifyJWT', asyncVerifyJWT)
     .decorate(
       'asyncVerifyUsernameAndPassword',
       async (request: UserAuthRequest, reply) => {
@@ -99,8 +83,10 @@ const authRoutes = async (fastify: FastifyInstance, options) => {
         logLevel: 'warn',
         preHandler: fastify.auth([fastify.asyncVerifyJWT]),
         handler: async (req, reply) => {
-          fastify.log.info(req);
-          reply.send({ status: 'You are logged in', user: req });
+          if (req.user.name === 'JsonWebTokenError') {
+            return reply.status(401).send(req.user);
+          }
+          reply.send({ status: 'You are logged in', user: req.user });
         },
       });
 
@@ -110,9 +96,21 @@ const authRoutes = async (fastify: FastifyInstance, options) => {
         logLevel: 'warn',
         preHandler: fastify.auth([fastify.asyncVerifyJWT]),
         handler: async (req, reply) => {
-          await fastify.prisma.token.delete({
-            where: { id: req.token },
-          });
+          try {
+            const token = await fastify.prisma.token.findFirst({
+              where: { token: req.token },
+            });
+
+            if (!token) {
+              return reply.status(401).send('Token not found');
+            }
+
+            await fastify.prisma.token.delete({
+              where: { id: token.id },
+            });
+          } catch (error) {
+            reply.status(500).send(error);
+          }
           reply.send({ status: 'You are logged out' });
         },
       });

@@ -33,7 +33,13 @@ export async function list(req, reply) {
 export async function view(req, reply) {
   const user = await fastify.prisma.user.findUnique({
     where: { id: req.params.id },
-    include: { roles: true },
+    include: {
+      roles: true,
+      tokens: true,
+      logs: true,
+      alerts: true,
+      incidents: true,
+    },
   });
 
   if (!user) {

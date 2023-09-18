@@ -1,7 +1,6 @@
 import { PrismaClient, Token, User } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { fastify } from '@root/index';
-import { fa } from '@faker-js/faker';
 
 export function ExtendToken(prismaToken: PrismaClient['token']) {
   return Object.assign(prismaToken, {
@@ -34,7 +33,9 @@ export function ExtendToken(prismaToken: PrismaClient['token']) {
       try {
         const user = await fastify.prisma.user.findUnique({
           where: { id: decoded.id },
+          include: { tokens: true },
         });
+        if (!user.tokens.length) return new Error('Expired token');
         if (!user) return new Error('User not found');
 
         return user;

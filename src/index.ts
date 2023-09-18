@@ -22,7 +22,7 @@ export const fastify: FastifyInstance = Fastify({
       target: '@fastify/one-line-logger',
     },
   },
-}).withTypeProvider<TypeBoxTypeProvider>();
+});
 
 // Plugins
 // fastify.register(FastifyAuth);
@@ -52,7 +52,7 @@ fastify.register(registerControllers);
 // });
 
 fastify.addHook('onError', async (request, reply, error) => {
-  fastify.log.error(error);
+  fastify.log.error(error.stack);
 });
 
 // Init Fastify server
