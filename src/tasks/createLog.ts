@@ -38,6 +38,6 @@ const createRandomLog = new AsyncTask(
   }
 );
 
-const createLogJob = new SimpleIntervalJob({ seconds: 17 }, createRandomLog);
+const createLogJob = new SimpleIntervalJob({ seconds: 1 }, createRandomLog);
 
 export default createLogJob;

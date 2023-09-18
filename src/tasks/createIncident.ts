@@ -58,7 +58,7 @@ const createRandomIncident = new AsyncTask(
 );
 
 const createIncidentJob = new SimpleIntervalJob(
-  { seconds: 18 },
+  { seconds: 1 },
   createRandomIncident
 );
 

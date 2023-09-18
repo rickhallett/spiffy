@@ -1,15 +1,16 @@
 import { SimpleIntervalJob, AsyncTask } from 'toad-scheduler';
-import { fastify } from '@root/index';
+import { fastify, saltRounds } from '@root/index';
 import {
   createRandomUser as createRandomUserHelper,
   createRandomRole,
 } from '@root/seed-db';
+import bcrypt from 'bcrypt';
 
 const createRandomUser = new AsyncTask(
   'create-user',
   () => {
     const user = createRandomUserHelper();
-    return fastify.bcrypt.hash(user.password).then((hashedPassword) => {
+    return bcrypt.hash(user.password, saltRounds).then((hashedPassword) => {
       fastify.prisma.user
         .create({
           data: {
@@ -31,6 +32,6 @@ const createRandomUser = new AsyncTask(
   }
 );
 
-const createUserJob = new SimpleIntervalJob({ seconds: 21 }, createRandomUser);
+const createUserJob = new SimpleIntervalJob({ seconds: 1 }, createRandomUser);
 
 export default createUserJob;
