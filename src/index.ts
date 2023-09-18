@@ -23,7 +23,6 @@ export const fastify: FastifyInstance = Fastify({
 });
 
 // Plugins
-// fastify.register(FastifyAuth);
 fastify.register(import('fastify-markdown'), { data: true });
 fastify.register(import('fastify-blipp'));
 fastify.register(import('@fastify/sensible'));
@@ -35,7 +34,6 @@ fastify.register(fastifySwaggerUIPlugin);
 
 // Plugin Routes
 fastify.register(health);
-fastify.register(home);
 fastify.register(root);
 fastify.register(summary);
 
