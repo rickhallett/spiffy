@@ -13,10 +13,10 @@ import { registerControllers } from '@routes/register-controllers';
 import { startSwagger } from '@docs/start-swagger';
 import { summary } from '@routes/check/summary';
 import usersRoutes from '@routes/user/user-routes';
-import {
-  asyncVerifyJWT,
-  asyncVerifyUsernameAndPassword,
-} from '@routes/user/user-routes';
+// import {
+//   asyncVerifyJWT,
+//   asyncVerifyUsernameAndPassword,
+// } from '@routes/user/user-routes';
 
 export const saltRounds = 12;
 
@@ -45,13 +45,14 @@ fastify.register(home);
 fastify.register(root);
 fastify.register(summary);
 
+fastify.register(registerControllers);
 fastify.register(usersRoutes);
 
 // Decorators
-fastify.decorate('registerControllers', registerControllers);
+// fastify.decorate('registerControllers', registerControllers);
 
 // CRUD Routes
-fastify.registerControllers();
+// fastify.registerControllers();
 
 // fastify.ready().then(() => {
 //   fastify.scheduler.addSimpleIntervalJob(createAlertJob);
@@ -60,28 +61,28 @@ fastify.registerControllers();
 //   fastify.scheduler.addSimpleIntervalJob(createUserJob);
 // });
 
-fastify.addHook('onRequest', async (request, reply) => {
-  const alreadyAuthenticated = [
-    '/api/v1/login',
-    '/api/v1/register',
-    '/api/v1/profile',
-    '/api/v1/logout',
-  ];
-  if (alreadyAuthenticated.includes(request.url)) {
-    return;
-  }
-
-  try {
-    fastify.auth([fastify.asyncVerifyJWT]);
-  } catch (err) {
-    fastify.log.error(err);
-    reply.status(401).send({ status: 'Unauthorized' });
-  }
-});
-
 fastify.addHook('onError', async (request, reply, error) => {
   fastify.log.error(error);
 });
+
+// fastify.addHook('onRequest', (request, reply, done) => {
+//   const alreadyAuthenticated = [
+//     '/api/v1/login',
+//     '/api/v1/register',
+//     '/api/v1/profile',
+//     '/api/v1/logout',
+//   ];
+//   if (alreadyAuthenticated.includes(request.url)) {
+//     return;
+//   }
+
+//   try {
+//     fastify.auth([fastify.asyncVerifyJWT]);
+//   } catch (err) {
+//     fastify.log.error(err);
+//     reply.status(401).send({ status: 'Unauthorized' });
+//   }
+// });
 
 // Init Fastify server
 fastify.listen(
