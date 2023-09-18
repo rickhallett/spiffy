@@ -10,7 +10,6 @@ export function ExtendUsers(prismaUser: PrismaClient['user']) {
 
       if (!user) throw new Error('No user');
 
-      // BUG: bcrypt.compare always returns false
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) throw new Error('Bad credentials');

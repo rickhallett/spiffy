@@ -1,7 +1,6 @@
 import fp from 'fastify-plugin';
 import FastifyAuth from '@fastify/auth';
 import crud from 'fastify-crud-generator';
-import { fastify } from '@root/index';
 import { userControllers } from '@routes/user/controllers';
 import { logControllers } from '@routes/log/controllers';
 import { alertControllers } from '@routes/alert/controllers';

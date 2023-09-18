@@ -1,4 +1,4 @@
-import { PrismaClient, Token, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { fastify } from '@root/index';
 

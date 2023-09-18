@@ -1,5 +1,4 @@
 import { fastify, saltRounds } from '@root/index';
-import { FastifyRequest } from 'fastify';
 import bcrypt from 'bcrypt';
 
 export async function create(req, reply) {

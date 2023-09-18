@@ -1,7 +1,6 @@
 import 'module-alias/register';
 import Fastify, { FastifyInstance } from 'fastify';
 import { join } from 'path';
-import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoLoad from '@fastify/autoload';
 import 'dotenv/config';
 import fastifySwaggerUIPlugin from './lib/spec/swagger/html';
@@ -10,7 +9,6 @@ import { root } from '@routes/root';
 import { registerControllers } from '@routes/register-controllers';
 import { startSwagger } from '@docs/start-swagger';
 import { summary } from '@routes/check/summary';
-import usersRoutes from '@routes/auth/auth-routes';
 import { health } from '@routes/health/health';
 import authRoutes from '@routes/auth/auth-routes';
 
