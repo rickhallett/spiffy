@@ -1,4 +1,3 @@
-import FastifyAuth from '@fastify/auth';
 import 'module-alias/register';
 import Fastify, { FastifyInstance } from 'fastify';
 import { join } from 'path';
@@ -6,17 +5,14 @@ import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import autoLoad from '@fastify/autoload';
 import 'dotenv/config';
 import fastifySwaggerUIPlugin from './lib/spec/swagger/html';
-import { getPing } from '@routes/utils/get-ping';
 import { home } from '@routes/home/home';
 import { root } from '@routes/root';
 import { registerControllers } from '@routes/register-controllers';
 import { startSwagger } from '@docs/start-swagger';
 import { summary } from '@routes/check/summary';
-import usersRoutes from '@routes/user/user-routes';
-// import {
-//   asyncVerifyJWT,
-//   asyncVerifyUsernameAndPassword,
-// } from '@routes/user/user-routes';
+import usersRoutes from '@routes/auth/auth-routes';
+import { health } from '@routes/health/health';
+import authRoutes from '@routes/auth/auth-routes';
 
 export const saltRounds = 12;
 
@@ -40,19 +36,13 @@ fastify.register(autoLoad, {
 fastify.register(fastifySwaggerUIPlugin);
 
 // Plugin Routes
-fastify.register(getPing);
+fastify.register(health);
 fastify.register(home);
 fastify.register(root);
 fastify.register(summary);
 
+fastify.register(authRoutes);
 fastify.register(registerControllers);
-fastify.register(usersRoutes);
-
-// Decorators
-// fastify.decorate('registerControllers', registerControllers);
-
-// CRUD Routes
-// fastify.registerControllers();
 
 // fastify.ready().then(() => {
 //   fastify.scheduler.addSimpleIntervalJob(createAlertJob);
@@ -64,25 +54,6 @@ fastify.register(usersRoutes);
 fastify.addHook('onError', async (request, reply, error) => {
   fastify.log.error(error);
 });
-
-// fastify.addHook('onRequest', (request, reply, done) => {
-//   const alreadyAuthenticated = [
-//     '/api/v1/login',
-//     '/api/v1/register',
-//     '/api/v1/profile',
-//     '/api/v1/logout',
-//   ];
-//   if (alreadyAuthenticated.includes(request.url)) {
-//     return;
-//   }
-
-//   try {
-//     fastify.auth([fastify.asyncVerifyJWT]);
-//   } catch (err) {
-//     fastify.log.error(err);
-//     reply.status(401).send({ status: 'Unauthorized' });
-//   }
-// });
 
 // Init Fastify server
 fastify.listen(

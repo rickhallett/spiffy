@@ -14,7 +14,7 @@ interface UserAuthRequest extends FastifyRequest {
   };
 }
 
-const usersRoutes = async (fastify: FastifyInstance, options) => {
+const authRoutes = async (fastify: FastifyInstance, options) => {
   const extendedToken = ExtendToken(fastify.prisma.token);
 
   fastify
@@ -119,4 +119,4 @@ const usersRoutes = async (fastify: FastifyInstance, options) => {
     });
 };
 
-export default usersRoutes;
+export default authRoutes;
