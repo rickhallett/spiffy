@@ -19,6 +19,7 @@ export function ExtendToken(prismaToken: PrismaClient['token']) {
       return created;
     },
 
+    // TODO: handle use case of expired token
     async findUserByToken(token) {
       let decoded;
 
@@ -35,7 +36,7 @@ export function ExtendToken(prismaToken: PrismaClient['token']) {
           where: { id: decoded.id },
           include: { tokens: true },
         });
-        if (!user.tokens.length) return new Error('Expired token');
+        if (!user.tokens.length) return new Error('You have been logged out');
         if (!user) return new Error('User not found');
 
         return user;
